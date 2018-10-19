@@ -1,0 +1,15 @@
+{
+  "name": "logger",
+  "version": "0.1.0",
+  "description": "simple logging utility",
+  "author": "Pau Fracés <pfraces@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "expect.js": "^0.3.1",
+    "lodash": "^4.17.11",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha --colors \"./test/**/*.spec.js\""
+  }
+}
