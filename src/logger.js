@@ -1,54 +1,49 @@
-var { noop, partial, assign, indexOf, reduce } = require('lodash');
+const { isArray, partial, assign, indexOf, each, map, reduce } = require('lodash');
 
-var LEVELS = [
-  'info',
-  'error'
-];
+const { levels, isError } = require('./severity.js');
+const formatters = require('./formatters.js');
+const writers = require('./writers.js');
 
-var DEFAULTS = {
+const DEFAULTS = {
   level: 'info',
   formatter: 'json',
   writer: 'console'
 };
 
-var formatters = {
-  json: function (level, message) {
-    return JSON.stringify({
-      timestamp: Date.now(),
-      level: level,
-      message: message
-    });
-  }
-};
+const logger = function (config) {
+  const settings = assign({}, DEFAULTS, config);
+  const { level, formatter, writer } = settings;
 
-var writers = {
-  console: console.log.bind(console)
-};
+  const minSeverity = indexOf(levels, level);
+  const format = partial(formatters[formatter], level);
+  const write = writers[writer];
 
-var writer = function (config) {
-  var { level, formatter, writer } = config;
-  var format = partial(formatters[formatter], level);
-
-  return function (message) {
-    writers[writer](format(message));
-    return message;
+  return function (severity, entry) {
+    if (severity < minSeverity) { return; }
+    write(format(entry));
   };
 };
 
-var methods = function (config) {
-  var levelIndex = indexOf(LEVELS, config.level);
-  var write = writer(config);
+const multiplexer = function (config) {
+  const configs = isArray(config) ? config : [config];
+  const logs = map(configs, logger);
 
-  return reduce(LEVELS, function (acc, level, index) {
-    acc[level] = index >= levelIndex ? write : noop;
+  return reduce(levels, function (acc, level, severity) {
+    acc[level] = function (message) {
+      const entry = {
+        timestamp: Date.now(),
+        level: level,
+        message: message
+      };
+
+      each(logs, function (log) { log(severity, entry); });
+      return isError(severity) ? new Error(entry) : entry;
+    };
+
     return acc;
   }, {});
 };
 
-var logger = function (config) {
-  return methods(assign({}, DEFAULTS, config));
-};
-
 module.exports = {
-  logger: logger
+  logger: multiplexer
 };

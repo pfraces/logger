@@ -1,5 +1,5 @@
-var expect = require('expect.js');
-var { logger } = require('../src/logger.js');
+const expect = require('expect.js');
+const { logger } = require('../src/logger.js');
 
 describe('src/logger', function () {
   describe('logger', function () {
@@ -12,11 +12,11 @@ describe('src/logger', function () {
     });
 
     describe('Log', function () {
-      it('should have an `info` method', function () {
+      it('should provide an `info` method', function () {
         expect(logger().info).to.be.a('function');
       });
 
-      it('should have an `error` method', function () {
+      it('should provide an `error` method', function () {
         expect(logger().error).to.be.a('function');
       });
     });
