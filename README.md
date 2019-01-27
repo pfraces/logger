@@ -43,8 +43,9 @@ var log = logger({
 
 ### Formatters
 
-  * `json` (default)
-  * `pretty` (e.g. `[27/01/2019] info: server up and running`)
+  * `json` (default, e.g. `{ "timestamp": 1548614131583, "level": "debug", "message": "..." }`)
+  * `compact` (e.g. `info: server up and running`)
+  * `verbose` (e.g. `[27/01/2019 19:38:23] error: server timeout`)
 
 ### Writers
 
@@ -64,12 +65,12 @@ You can easily achieve this by passing to `logger()` an array of config objects
 var log = logger([
   {
     level: 'info',
-    formatter: 'json',
+    formatter: 'compact',
     writer: 'stdout'
   },
   {
     level: 'error',
-    formatter: 'pretty',
+    formatter: 'verbose',
     writer: 'file'
   }
 ]);

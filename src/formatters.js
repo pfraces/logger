@@ -4,13 +4,18 @@ const jsonFormatter = function (entry) {
   return JSON.stringify(entry);
 };
 
-const prettyFormatter = function ({ timestamp, level, message }) {
+const compactFormatter = function ({ level, message }) {
+  return `${level}: ${message}`;
+};
+
+const verboseFormatter = function ({ timestamp, level, message }) {
   const date = dateformat(timestamp, 'dd/mm/yyyy HH:MM:ss');
   return `[${date}] ${level}: ${message}`;
 };
 
 module.exports = {
   json: jsonFormatter,
-  pretty: prettyFormatter
+  compact: compactFormatter,
+  verbose: verboseFormatter
 };
 
