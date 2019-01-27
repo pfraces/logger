@@ -6,7 +6,7 @@ const jsonFormatter = function (entry) {
 
 const prettyFormatter = function ({ timestamp, level, message }) {
   const date = dateformat(timestamp, 'dd/mm/yyyy HH:MM:ss');
-  return `[${date}|${level}] ${message}`;
+  return `[${date}] ${level}: ${message}`;
 };
 
 module.exports = {

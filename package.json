@@ -9,10 +9,12 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "eslint": "^5.12.1",
     "expect.js": "^0.3.1",
     "mocha": "^5.2.0"
   },
   "scripts": {
+    "lint": "eslint ./src/**/*.js",
     "test": "mocha --colors \"./test/**/*.spec.js\""
   }
 }

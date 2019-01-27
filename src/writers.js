@@ -1,5 +1,7 @@
-const consoleWriter = console.log.bind(console);
+const stdoutWriter = function (msg) {
+  process.stdout.write(msg + '\n');
+};
 
 module.exports = {
-  console: consoleWriter
+  stdout: stdoutWriter
 };

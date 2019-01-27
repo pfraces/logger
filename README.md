@@ -11,7 +11,7 @@ const { logger } = require('logger');
 
 const log = logger();
 log.info('server up and running');
-if (err) { throw log.error(`an error ocurred: ${err}`); }
+log.error(`an error ocurred: ${err}`);
 ```
 
 Components
@@ -19,7 +19,7 @@ Components
 
 **logger** is based on the following components:
 
-  * Levels
+  * Severity levels
   * Formatters
   * Writers
 
@@ -31,28 +31,26 @@ You can customize them with the optional `config` paramenter
 var log = logger({
   level: 'info',
   formatter: 'json',
-  writer: 'console'
+  writer: 'stdout'
 });
 ```
 
-### Levels
+### Severity levels
 
-  * Info (default)
-  * Error
-  * Custom
+  * `debug`
+  * `info` (default)
+  * `error`
 
 ### Formatters
 
-  * JSON (default)
-  * String templates
-  * Custom
+  * `json` (default)
+  * `pretty` (e.g. `[27/01/2019] info: server up and running`)
 
 ### Writers
 
-  * Console (default)
-  * File
-  * Http
-  * Custom
+  * `stdout` (default)
+  * `file` (_TODO_)
+  * `http` (_TODO_)
 
 Multiplexing
 ------------
@@ -67,11 +65,11 @@ var log = logger([
   {
     level: 'info',
     formatter: 'json',
-    writer: 'console'
+    writer: 'stdout'
   },
   {
     level: 'error',
-    formatter: 'compact',
+    formatter: 'pretty',
     writer: 'file'
   }
 ]);

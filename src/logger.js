@@ -1,43 +1,42 @@
 const { isArray, partial, assign, indexOf, each, map, reduce } = require('lodash');
 
-const { levels, isError } = require('./severity.js');
+const severity = require('./severity.js');
 const formatters = require('./formatters.js');
 const writers = require('./writers.js');
 
 const DEFAULTS = {
   level: 'info',
   formatter: 'json',
-  writer: 'console'
+  writer: 'stdout'
 };
 
 const logger = function (config) {
   const settings = assign({}, DEFAULTS, config);
   const { level, formatter, writer } = settings;
 
-  const minSeverity = indexOf(levels, level);
+  const minSeverity = indexOf(severity, level);
   const format = partial(formatters[formatter], level);
   const write = writers[writer];
 
-  return function (severity, entry) {
+  return function (level, message) {
+    const severity = severity[level];
     if (severity < minSeverity) { return; }
-    write(format(entry));
+
+    write(format({
+      timestamp: Date.now(),
+      level: level,
+      message: message
+    }));
   };
 };
 
-const multiplexer = function (config) {
-  const configs = isArray(config) ? config : [config];
-  const logs = map(configs, logger);
+const multiplexer = function (configs) {
+  configs = isArray(configs) ? configs : [configs];
+  const loggers = map(configs, logger);
 
-  return reduce(levels, function (acc, level, severity) {
+  return reduce(severity, function (acc, level) {
     acc[level] = function (message) {
-      const entry = {
-        timestamp: Date.now(),
-        level: level,
-        message: message
-      };
-
-      each(logs, function (log) { log(severity, entry); });
-      return isError(severity) ? new Error(entry) : entry;
+      each(loggers, function (logger) { logger(level, message); });
     };
 
     return acc;
