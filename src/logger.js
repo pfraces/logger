@@ -19,8 +19,7 @@ const logger = function (config) {
   const write = writers[writer];
 
   return function (level, message) {
-    const severity = severity[level];
-    if (severity < minSeverity) { return; }
+    if (severity[level] < minSeverity) { return; }
 
     write(format({
       timestamp: Date.now(),
