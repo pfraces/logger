@@ -75,3 +75,12 @@ var log = logger([
   }
 ]);
 ```
+
+Alternative logging libraries
+-----------------------------
+
+  * [winston](https://github.com/winstonjs/winston)
+  * [debug](https://github.com/visionmedia/debug)
+  * [roarr](https://github.com/gajus/roarr)
+  * [bristol](https://github.com/TomFrost/Bristol)
+  * [logule](https://github.com/clux/logule)
